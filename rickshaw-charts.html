@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="multi-chart.html">
+<script src="../rickshaw/rickshaw.js"></script>
 <!--
 An element providing a solution to no problem in particular.
 
@@ -31,14 +32,104 @@ Example:
 
  <template>
     <p>Rickshaw Charts</p>
-    <multi-chart></multi-chart>
-    <multi-chart></multi-chart>
+    <button on-tap="updateMultiChart">Update</button>
+    <multi-chart series="{{series}}"></multi-chart>
+    <multi-chart series="{{series2}}"></multi-chart>
   </template>
 </dom-module>
 <script>
 (function() {
   Polymer({
-    is: 'rickshaw-charts'
+    is: 'rickshaw-charts',
+
+    attached:function(){
+      this.setStandardSeriesMultiChart();
+    },
+
+    updateMultiChart:function(){
+      this.setStandardSeriesMultiChart();
+      this.setStandardSeriesMultiChart2();
+    },
+
+    setStandardSeriesMultiChart:function(){
+      var seriesData = [ [], [], [], [], [] ];
+      var random = new Rickshaw.Fixtures.RandomData(50);
+
+      for (var i = 0; i < 75; i++) {
+        random.addData(seriesData);
+      }
+
+      var series = [
+                      {
+                        name: 'temperature',
+                        data: seriesData.shift(),
+                        color: 'rgba(255, 0, 0, 0.4)',
+                        renderer: 'stack'
+                      }, {
+                        name: 'heat index',
+                        data: seriesData.shift(),
+                        color: 'rgba(255, 127, 0, 0.4)',
+                        renderer: 'stack'
+                      }, {
+                        name: 'dewpoint',
+                        data: seriesData.shift(),
+                        color: 'rgba(127, 0, 0, 0.3)',
+                        renderer: 'scatterplot'
+                      }, {
+                        name: 'pop',
+                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y / 4 } }),
+                        color: 'rgba(0, 0, 127, 0.4)',
+                        renderer: 'bar'
+                      }, {
+                        name: 'humidity',
+                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y * 1.5 } }),
+                        renderer: 'line',
+                        color: 'rgba(0, 0, 127, 0.25)'
+                      }
+                    ];
+      this.series = series;
+    },
+
+    setStandardSeriesMultiChart2:function(){
+      var seriesData = [ [], [], [], [], [] ];
+      var random = new Rickshaw.Fixtures.RandomData(50);
+
+      for (var i = 0; i < 75; i++) {
+        random.addData(seriesData);
+      }
+
+      var series = [
+                      {
+                        name: 'temperature',
+                        data: seriesData.shift(),
+                        color: 'rgba(255, 0, 0, 0.4)',
+                        renderer: 'stack'
+                      }, {
+                        name: 'heat index',
+                        data: seriesData.shift(),
+                        color: 'rgba(255, 127, 0, 0.4)',
+                        renderer: 'stack'
+                      }, {
+                        name: 'dewpoint',
+                        data: seriesData.shift(),
+                        color: 'rgba(127, 0, 0, 0.3)',
+                        renderer: 'scatterplot'
+                      }, {
+                        name: 'pop',
+                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y / 4 } }),
+                        color: 'rgba(0, 0, 127, 0.4)',
+                        renderer: 'bar'
+                      }, {
+                        name: 'humidity',
+                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y * 1.5 } }),
+                        renderer: 'line',
+                        color: 'rgba(0, 0, 127, 0.25)'
+                      }
+                    ];
+      this.series2 = series;
+    }
+
+
   });
 })();
 </script>
