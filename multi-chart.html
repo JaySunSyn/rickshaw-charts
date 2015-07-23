@@ -1,0 +1,161 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<script src="../d3/d3.js"></script>
+<script src="../jquery/dist/jquery.js"></script>
+<script src="../rickshaw/rickshaw.js"></script>
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <multi-chart></multi-chart>
+
+@demo
+-->
+
+<dom-module id="multi-chart">
+  <link type="text/css" rel="stylesheet" href="../rickshaw/rickshaw.css">
+  <style is="custom-style">
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+    .column { display: inline-block }
+
+    #legend { background: white }
+    #legend { color: #333 }
+
+    div, span, p, td {
+      font-family: Arial, sans-serif;
+    }
+    #chart {
+      display: inline-block;
+    }
+    #legend {
+      display: inline-block;
+      position: relative;
+      left: 8px;
+    }
+    #legend_container {
+      position: absolute;
+      right: 0;
+      bottom: 26px;
+      width: 0;
+    }
+    #chart_container {
+      float: left;
+      position: relative;
+    }
+
+  </style>
+
+ <template>
+    <div class="column">
+      <div id="chart"></div>
+      <div id="slider"></div>
+    </div>
+    <div class="column" id="legend"></div>
+  </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'multi-chart',
+
+    properties: {
+      foo: {
+        type: String,
+        value: 'bar',
+        notify: true
+      },
+
+      graph:Object,
+
+      series:{
+        type:Array,
+        value: function(){ return []; }
+      }
+
+    },
+
+    observers: [
+      'update(series.slice())'
+    ],
+
+    ready:function(){
+      this.update();
+    },
+
+    update:function(){
+      this.plotChart(this.series);
+      // this.plotHoverDetail();
+      this.renderChart();
+      this.plotSlider();
+      this.plotLegend();
+    },
+
+    plotChart:function(series){
+      this.$.chart.innerHTML='';
+
+      this.graph = new Rickshaw.Graph( {
+        element: this.$.chart,
+        renderer: 'multi',
+        width: 900,
+        height: 500,
+        dotSize: 5,
+        series: series
+      } );
+      
+    },
+
+    renderChart:function(){
+      this.graph.render();
+    },
+
+    plotSlider:function(){
+      this.$.slider.innerHTML = '';
+
+      var slider = new Rickshaw.Graph.RangeSlider.Preview({
+        graph: this.graph,
+        element: this.$.slider
+      });
+    },
+
+    plotHoverDetail:function(){
+      var detail = new Rickshaw.Graph.HoverDetail({
+        graph: this.graph
+      });
+    },
+
+    plotLegend:function(){
+      this.$.legend.innerHTML ='';
+
+      var legend = new Rickshaw.Graph.Legend({
+        graph: this.graph,
+        element: this.$.legend
+      });
+      var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
+          graph: this.graph,
+          legend: legend,
+          disabledColor: function() { return 'rgba(0, 0, 0, 0.2)' }
+      });
+      var highlighter = new Rickshaw.Graph.Behavior.Series.Toggle({
+          graph: this.graph,
+          legend: legend
+      });
+    }
+
+  });
+})();
+</script>
