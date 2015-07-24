@@ -77,22 +77,26 @@ Example:
 
       xheight:{
         type:String,
-        value:'250'
+        value:'250',
+        observer:'_valuesChanged'
       },
 
       xwidth:{
         type:String,
-        value:'450'
+        value:'450',
+        observer:'_valuesChanged'
       },
 
       dotSize:{
         type:Number,
-        value:5
+        value:5,
+        observer:'_valuesChanged'
       },
 
       renderer:{
         type:String,
-        value:'multi'
+        value:'multi',
+        observer:'_valuesChanged'
       },
 
       graph:Object,
@@ -105,11 +109,18 @@ Example:
     },
 
     observers: [
-      'update(series.slice())'
+      '_valuesChanged(series.slice())'
     ],
 
     attached:function(){
       this.update();
+    },
+
+    _valuesChanged:function(){
+      if (this.graph) {
+        this.update();
+      };
+      
     },
 
     update:function(){
