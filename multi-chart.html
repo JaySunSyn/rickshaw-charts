@@ -74,10 +74,24 @@ Example:
     is: 'multi-chart',
 
     properties: {
-      foo: {
-        type: String,
-        value: 'bar',
-        notify: true
+      chartWidth:{
+        type:Number,
+        value:450
+      },
+
+      chartHeight:{
+        type:Number,
+        value:250
+      },
+
+      dotSize:{
+        type:Number,
+        value:5
+      },
+
+      renderer:{
+        type:String,
+        value:'multi'
       },
 
       graph:Object,
@@ -110,10 +124,10 @@ Example:
 
       this.graph = new Rickshaw.Graph( {
         element: this.$.chart,
-        renderer: 'multi',
-        width: 900,
-        height: 500,
-        dotSize: 5,
+        renderer: this.renderer,
+        width: this.chartWidth,
+        height: this.chartHeight,
+        dotSize: this.dotSize,
         series: series
       } );
       
