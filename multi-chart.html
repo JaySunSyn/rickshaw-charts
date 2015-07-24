@@ -74,14 +74,15 @@ Example:
     is: 'multi-chart',
 
     properties: {
-      chartWidth:{
-        type:Number,
-        value:450
+
+      xheight:{
+        type:String,
+        value:'250'
       },
 
-      chartHeight:{
-        type:Number,
-        value:250
+      xwidth:{
+        type:String,
+        value:'450'
       },
 
       dotSize:{
@@ -107,11 +108,12 @@ Example:
       'update(series.slice())'
     ],
 
-    ready:function(){
+    attached:function(){
       this.update();
     },
 
     update:function(){
+
       this.plotChart(this.series);
       // this.plotHoverDetail();
       this.renderChart();
@@ -125,8 +127,8 @@ Example:
       this.graph = new Rickshaw.Graph( {
         element: this.$.chart,
         renderer: this.renderer,
-        width: this.chartWidth,
-        height: this.chartHeight,
+        width: parseInt(this.xwidth),
+        height: parseInt(this.xheight),
         dotSize: this.dotSize,
         series: series
       } );
