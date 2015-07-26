@@ -9,10 +9,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../import-rickshaw/import-rickshaw.html">
+<link rel="import" href="../import-jquery/import-jquery.html">
 
-<script src="../d3/d3.js"></script>
+<!-- <script src="../d3/d3.js"></script>
 <script src="../jquery/dist/jquery.js"></script>
-<script src="../rickshaw/rickshaw.js"></script>
+<script src="../rickshaw/rickshaw.js"></script> -->
 
 <!--
 An element providing a solution to no problem in particular.
@@ -33,19 +35,19 @@ Example:
     }
     .column { display: inline-block }
 
-    #legend { background: white }
-    #legend { color: #333 }
 
     div, span, p, td {
       font-family: Arial, sans-serif;
     }
-    #chart {
+    .chart {
       display: inline-block;
     }
-    #legend {
+    .legend {
       display: inline-block;
       position: relative;
       left: 8px;
+      color: #333;
+      background: white;
     }
     #legend_container {
       position: absolute;
@@ -62,10 +64,10 @@ Example:
 
  <template>
     <div class="column">
-      <div id="chart"></div>
-      <div id="slider"></div>
+      <div id="{{_chartId}}" class="chart"></div>
+      <div id="{{_sliderId}}" class="slider"></div>
     </div>
-    <div class="column" id="legend"></div>
+    <div class="column" id="{{_legendId}}" class="legend"></div>
   </template>
 </dom-module>
 <script>
@@ -101,10 +103,15 @@ Example:
 
       graph:Object,
 
+      _chartId:String,
+      _sliderId:String,
+      _legendId:String,
+
+
       series:{
         type:Array,
         value: function(){ return []; }
-      }
+      },
 
     },
 
@@ -113,6 +120,9 @@ Example:
     ],
 
     attached:function(){
+      this._chartId  = 'rsMultiChart_' + String(new Date().getTime());
+      this._sliderId = 'rsMultiChartSlider_' + String(new Date().getTime());
+      this._legendId = 'rsMultiChartLegend_' + String(new Date().getTime());
       this.update();
     },
 
@@ -124,22 +134,23 @@ Example:
     },
 
     update:function(){
-
       this.plotChart(this.series);
-      // this.plotHoverDetail();
-      this.renderChart();
+      this.plotHoverDetail();
       this.plotSlider();
+      this.renderChart();
       this.plotLegend();
     },
 
     plotChart:function(series){
-      this.$.chart.innerHTML='';
+      
+      var element = document.querySelector("#" + this._chartId);
+      $(element).empty();
 
       this.graph = new Rickshaw.Graph( {
-        element: this.$.chart,
+        element: element,
         renderer: this.renderer,
-        width: parseInt(this.xwidth),
-        height: parseInt(this.xheight),
+        width: parseInt(this.chartWidth),
+        height: parseInt(this.chartHeight),
         dotSize: this.dotSize,
         series: series
       } );
@@ -151,26 +162,30 @@ Example:
     },
 
     plotSlider:function(){
-      this.$.slider.innerHTML = '';
+
+      var element = document.querySelector("#" + this._sliderId);
+      $(element).empty();
 
       var slider = new Rickshaw.Graph.RangeSlider.Preview({
         graph: this.graph,
-        element: this.$.slider
+        element: element
       });
     },
 
     plotHoverDetail:function(){
       var detail = new Rickshaw.Graph.HoverDetail({
         graph: this.graph
-      });
+      });      
     },
 
     plotLegend:function(){
-      this.$.legend.innerHTML ='';
+
+      var element = document.querySelector("#" + this._legendId);
+      $(element).empty();
 
       var legend = new Rickshaw.Graph.Legend({
         graph: this.graph,
-        element: this.$.legend
+        element: element
       });
       var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight({
           graph: this.graph,
