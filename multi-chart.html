@@ -101,6 +101,12 @@ Example:
         observer:'_valuesChanged'
       },
 
+      stacked:{
+        type:Boolean,
+        value:true,
+        observer:'_valuesChanged'
+      },
+
       graph:Object,
 
       _chartId:String,
@@ -158,6 +164,7 @@ Example:
     },
 
     renderChart:function(){
+      this.graph.renderer.unstack = !this.stacked;
       this.graph.render();
     },
 
