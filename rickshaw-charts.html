@@ -33,8 +33,16 @@ Example:
  <template>
     <p>Rickshaw Charts</p>
     <button on-tap="updateMultiChart">Update</button>
-    <multi-chart renderer="line" xwidth="600" xheight="300" chartWidth="xyz" series="{{series}}"></multi-chart>
-    <multi-chart series="{{series2}}"></multi-chart>
+    <multi-chart id="mul" series="{{series}}" ></multi-chart>
+    <!-- <multi-chart series="{{series}}" renderer="bar"></multi-chart> -->
+    <multi-chart series="{{series}}"
+          id="multi"
+          chart-width="500"
+          chart-height="200"
+          renderer="bar"
+          stacked="{{stacked}}"
+          >
+    </multi-chart>
   </template>
 </dom-module>
 <script>
@@ -89,42 +97,39 @@ Example:
                       }
                     ];
       this.series = series;
+
     },
 
     setStandardSeriesMultiChart2:function(){
-      var seriesData = [ [], [], [], [], [] ];
+      var seriesData = [ [], [], [], [], [],[], [], [], [], [] ];
       var random = new Rickshaw.Fixtures.RandomData(50);
 
-      for (var i = 0; i < 75; i++) {
+      for (var i = 0; i < 10; i++) {
         random.addData(seriesData);
       }
 
+      var dat  = [{x:0,y:10},{x:1,y:3},{x:2,y:2}];
+      var dat2 = [{x:0,y:9},{x:1,y:5},{x:2,y:3}];
+      var dat3 = [{x:0,y:10},{x:1,y:3},{x:2,y:2}];
+      var dat4 = [{x:0,y:9},{x:1,y:5},{x:2,y:3}];
+
       var series = [
                       {
-                        name: 'temperature',
-                        data: seriesData.shift(),
-                        color: 'rgba(255, 0, 0, 0.4)',
-                        renderer: 'stack'
+                        name: 'M 0-19',
+                        data: dat,
+                        color: '#2196F3'
                       }, {
-                        name: 'heat index',
-                        data: seriesData.shift(),
-                        color: 'rgba(255, 127, 0, 0.4)',
-                        renderer: 'stack'
+                        name: 'M 20-39',
+                        data: dat2,
+                        color: '#03A9F4'
                       }, {
-                        name: 'dewpoint',
-                        data: seriesData.shift(),
-                        color: 'rgba(127, 0, 0, 0.3)',
-                        renderer: 'scatterplot'
+                        name: 'M 40-59',
+                        data: dat3,
+                        color: '#FFC841'
                       }, {
-                        name: 'pop',
-                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y / 4 } }),
-                        color: 'rgba(0, 0, 127, 0.4)',
-                        renderer: 'bar'
-                      }, {
-                        name: 'humidity',
-                        data: seriesData.shift().map(function(d) { return { x: d.x, y: d.y * 1.5 } }),
-                        renderer: 'line',
-                        color: 'rgba(0, 0, 127, 0.25)'
+                        name: 'M 60+',
+                        data: dat4,
+                        color: '#03A9F4'
                       }
                     ];
       this.series2 = series;
