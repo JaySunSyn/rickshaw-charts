@@ -55,6 +55,7 @@ Example:
     #chart_container {
       float: left;
       position: relative;
+
     }
 
   </style>
@@ -114,7 +115,7 @@ Example:
       series:{
         type:Array,
         value: function(){ return []; }
-      },
+      }
 
     },
 
@@ -137,11 +138,18 @@ Example:
     },
 
     update:function(){
-      this.plotChart(this.series);
+
+      if (this.series.length > 0) {
+        this.plotChart(this.series);
+      };
+      
+
       this.plotHoverDetail();
       this.plotSlider();
+
       this.renderChart();
       this.plotLegend();
+
     },
 
     plotChart:function(series){
