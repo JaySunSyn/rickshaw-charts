@@ -150,6 +150,9 @@ Example:
     },
 
     plotChart:function(series){
+      if (series.length === 0) {
+        return null;
+      };
       
       var element = document.querySelector("#" + this._chartId);
       $(element).empty();
